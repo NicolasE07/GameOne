@@ -41,20 +41,15 @@ function startGame() {
     console.log("********* carta Actual  **********");
     console.log(currentCard);
     console.log("*******************************\n");
-    const filterCards = cardsRandom.filter(
-      (card) =>
-        card.color === currentCard.color ||
-        card.number === currentCard.number ||
-        (card.special && card.specialType === "wildDrawFour") ||
-        (card.special && card.specialType === "wild")
-    );
-
-    console.log(`------------------------- tus cartas -------------------------`);
-    filterCards.forEach((card) => {
-      const index = playersCards[0].cards.indexOf(card);
-      console.log(`${index} card: ${card?.color ?? ""} ${card?.number ?? ""}`);
-    });
+    const filterCards = playersCards[0].cards.filter((card) => card.color === currentCard.color || card.number === currentCard.number);
     
+    // const filterCards = cardsRandom.filter((card) => card.color === currentCard.color || card.number === currentCard.number || (card.special === true && card.specialType === 'wildDrawFour') || (card.special === true && card.specialType === 'wild'));
+    
+    console.log(`------------------------- tus cartas -------------------------`);
+    filterCards.forEach((card, i) => {
+      const index = playersCards[0].cards.indexOf(card);
+        console.log(`${index} card: ${card?.color ?? ""} ${card?.number ?? ""}`);
+    });
     log("tienes " + playersCards[0].cards.length + " cartas");
     console.log("-------------------------------------------------------------\n");
 
@@ -64,7 +59,7 @@ function startGame() {
       const newCard = takeCard();
       playersCards[0].cards.push(newCard);
       console.log(`-> Tu Nueva carta es ${JSON.stringify(newCard)}`);
-      log("**********************************************************");
+      log("**********************************************************")
       takeCpuTurn();
       return;
     }
@@ -77,18 +72,14 @@ function startGame() {
       return;
     }
 
-    const { color, number, special, specialType } = playersCards[0].cards[answer];
+    const cardEscogida = playersCards[0].cards[answer];
 
     log("*********** " + JSON.stringify(cardEscogida) + "**********************");
 
-
     if (
-      cardEscogida?.color === color ||
-      cardEscogida?.number === number || special
+      cardEscogida?.color === currentCard?.color ||
+      cardEscogida?.number === currentCard?.number
     ) {
-      if(special){
-        cardsSpecials[specialType]();
-      }
       const cardEscogidaIndex = playersCards[0].cards.indexOf(cardEscogida);
       log(cardEscogidaIndex);
       log("TENIAS " + playersCards[0].cards.length + " CARTAS");
@@ -181,14 +172,14 @@ const createCards = () => {
   const cards = Array(numberOfCards * players.length)
     .fill(null)
     .map((_, i) => {
-      const cardsSpecial = randomCardSpecial();
-      if (cardsSpecial !== null) {
-        return cardsSpecial;
-      }
+      // const cardsSpecial = randomCardSpecial();
+      // if (cardsSpecial !== null) {
+      //   return cardsSpecial;
+      // }
       return {
         color: colors[i % colors.length],
         number: i % 10,
-        special: false,
+        special: null,
         specialType: null,
       };
     });
@@ -220,18 +211,13 @@ const deal = (deck) => {
   return playersMap;
 };
 
-// startGame();
+startGame();
 
-const currentCard = { color: "red", number: 5, special: null, specialType: null };
-const cardsRandom = createCards();
-const filtercards = cardsRandom.filter(
-  (card) =>
-    card.color === currentCard.color ||
-    card.number === currentCard.number ||
-    (card.special === true && card.specialType === "wildDrawFour") ||
-    (card.special === true && card.specialType === "wild")
-);
-log(currentCard);
-log(filtercards);
 
-rl.close();
+// const currentCard = {  color: "red", number: 5, special: null, specialType: null }
+// const cardsRandom = createCards();
+// const filtercards = cardsRandom.filter((card) => card.color === currentCard.color || card.number === currentCard.number || (card.special === true && card.specialType === 'wildDrawFour') || (card.special === true && card.specialType === 'wild'));
+// log(currentCard);
+// log(filtercards);
+
+// rl.close();
